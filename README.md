@@ -1,5 +1,5 @@
 # Codes for reproductivity
-This page contains the information that reproduces the results for the preprint paper, including figures, etc. 
+This page contains the information that reproduces the results for the preprint paper, including figures, etc. As the code was further used in another study, there might be some redunduncy in the code :).
 
 ## 📚 Research Information
 
