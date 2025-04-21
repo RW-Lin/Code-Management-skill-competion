@@ -63,16 +63,17 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
 
     % ******** visual check if the peak detection is correct *********
     if debug && id>200
-        figure,subplot(411)
+        figure,subplot(311)
         plot(session_PPG_time,data_ppg)
         hold on 
         plot(ppg_peaktime,data_ppg(ppg_peakidx),'o')
         title('PPG');xline(timestamp,'Color','r')
-        subplot(412)
+        subplot(312)
         plot(session_ECG_time,data_ecg)
         hold on 
         plot(ecg_peaktime,data_ecg(ecg_peakidx),'o');
         xline(timestamp,'Color','r');ylabel('ECG');xlabel('Time [min]')
+        xlim([54.35 54.7])
         subplot(425)
         plot(time_PAT,PAT,'o-');ylabel('PAT [ms]')
         xline(timestamp,'Color','r');xlabel('Time [min]')
@@ -80,12 +81,18 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
         plot(time_PAT(1:end-1),diff(PAT),'*-');
         ylabel('PATv [ms]');xlabel('Time [min]');
         xline(timestamp,'Color','r','DisplayName','Supine-stand')
-        subplot(414)
-        plot(calibrated_peaks_ppg(1:end-1),60./diff(60*calibrated_peaks_ppg),'o-');hold on;
-        plot(calibrated_peaks_ecg(1:end-1),60./diff(60*calibrated_peaks_ecg),'*-');
+        subplot(313)
+        plot(calibrated_peaks_ppg(1:end-1),diff(calibrated_peaks_ppg),'o-');hold on;
+        plot(calibrated_peaks_ecg(1:end-1),diff(calibrated_peaks_ecg),'*-');
         legend('PR','HR');ylabel('Heart rate [bpm]')
-        xline(timestamp,'Color','r','DisplayName','Supine-stand')
+        xline(timestamp,'Color','g','LineWidth',2)
+        xlim([54.35 54.7])
         sgtitle(id)
+
+      
+       
+        xline([timestamp(1)*60 timestamp(2)*60],'g','LineWidth',2);
+        legend('HR','PR'); ylabel('[bpm]');xlabel('Time [s]')
     end
 
     %% supine   

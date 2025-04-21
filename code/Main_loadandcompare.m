@@ -27,7 +27,7 @@ for i = 1:length(dirInfo)
 
         thirdDirInfo = dir(secondLevelPath);
 
-        for k = 1:length(thirdDirInfo)
+        for k = 10:length(thirdDirInfo)
             if ~thirdDirInfo(k).isdir || startsWith(thirdDirInfo(k).name, '.')
                 continue;
             end

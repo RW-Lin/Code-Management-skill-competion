@@ -1,65 +1,42 @@
 %%  Main program compares old / young under different positions
- clear all,close all
+clear all,close all
 
 Fs_resample = 4; %s^-1
 overlap = 1; win_len = 2; %minute
 lag_before = 5; lag_after = 3; % duration before and after timestamp
 fs_ppg = 1e3; debug = 0; fs_ecg = 3e2;
-activity = {'Supine_stand','HUT','SittoStand','VM'};  
 
 
-for act = 1:length(activity) 
-savepath = ['C:\Users\LinR\OneDrive - University of Twente\work\project\Spectral analysis of HRV, PTT and BP\Codes\store_results\' activity{act} '\' ]; 
+savepath = 'C:\Users\LinR\OneDrive - University of Twente\work\project\Spectral analysis of HRV, PTT and BP\Codes\store_results\Supine_stand\'; 
 dirInfo = dir(savepath);
 %% initialization
-HRV_supine_old = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+HRV_supine_old = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-HRV_upright_old = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+HRV_upright_old = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-HRV_transition_old = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+HRV_transition_old = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-PRV_upright_old = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+PRV_upright_old = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-PRV_supine_old = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+PRV_supine_old = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-PRV_transition_old =struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+PRV_transition_old =struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-HRV_supine_young = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+HRV_supine_young = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-HRV_upright_young = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+HRV_upright_young = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-HRV_transition_young = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+HRV_transition_young = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-PRV_upright_young = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+PRV_upright_young = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-PRV_supine_young = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+PRV_supine_young = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]);
-PRV_transition_young = struct('AVNN',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
+PRV_transition_young = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]); 
-sdPAT_transition_old = []; sdPAT_supine_old = []; sdPAT_upright_old = [];
-mnPAT_transition_old = []; mnPAT_supine_old = []; mnPAT_upright_old = [];
-sdPAT_transition_young = []; sdPAT_supine_young = []; sdPAT_upright_young = [];
-mnPAT_transition_young = []; mnPAT_supine_young = []; mnPAT_upright_young = [];
-sdPATv_transition_old = []; sdPATv_supine_old = []; sdPATv_upright_old = [];
-mnPATv_transition_old = []; mnPATv_supine_old = []; mnPATv_upright_old = [];
-sdPATv_transition_young = []; sdPATv_supine_young = []; sdPATv_upright_young = [];
-mnPATv_transition_young = []; mnPATv_supine_young = []; mnPATv_upright_young = [];
-
-kuPAT_transition_old = []; kuPAT_supine_old = []; kuPAT_upright_old = [];
-skPAT_transition_old = []; skPAT_supine_old = []; skPAT_upright_old = [];
-kuPAT_transition_young = []; kuPAT_supine_young = []; kuPAT_upright_young = [];
-skPAT_transition_young = []; skPAT_supine_young = []; skPAT_upright_young = [];
-kuPATv_transition_old = []; kuPATv_supine_old = []; kuPATv_upright_old = [];
-skPATv_transition_old = []; skPATv_supine_old = []; skPATv_upright_old = [];
-kuPATv_transition_young = []; kuPATv_supine_young = []; kuPATv_upright_young = [];
-skPATv_transition_young = []; skPATv_supine_young = []; skPATv_upright_young = [];
-
-% RRall_supine_old = []; PRall_supine_old = []; RRall_supine_young = []; PRall_supine_young = [];
-% RRall_upright_old = []; PRall_upright_old = []; RRall_upright_young = []; PRall_upright_young = [];
-% RRall_transition_old = []; PRall_transition_old = []; RRall_transition_young = []; PRall_transition_young = [];
 
 %%
-for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 27 36 60
+for sg_num = 4:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 27 36 60
     
     filename = dirInfo(sg_num).name;
     id = sscanf(filename, '%*[^0-9]%d'); id = id(1);
@@ -74,10 +51,10 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
     psqi_session = data_segments.psqi; 
     ecg_peakidx = data_segments.ecg_idx; ppg_peakidx = data_segments.ppg_idx;
     
-    [PAT, calibrated_peaks_ecg, calibrated_peaks_ppg] =...
+    [~, calibrated_peaks_ecg, calibrated_peaks_ppg] =...
         calculate_PATv(ecg_peaktime*60,ppg_peaktime*60,psqi_session,fs_ppg,timestamp*60,lag_before);
     
-    [PAT,time_PAT] = PATfilter(PAT, calibrated_peaks_ppg, 30);
+    % [PAT,time_PAT] = PATfilter(PAT, calibrated_peaks_ppg, 30);
     RR = HRV.RRfilter(diff(calibrated_peaks_ecg),60); 
     PR = HRV.RRfilter(diff(calibrated_peaks_ppg),60);
     time_RR = calibrated_peaks_ecg(1:end-1); time_PR = calibrated_peaks_ppg(1:end-1);
@@ -86,34 +63,33 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
 
     % ******** visual check if the peak detection is correct *********
     if debug && id>200
-        figure,subplot(411)
+        figure,subplot(311)
         plot(session_PPG_time,data_ppg)
         hold on 
         plot(ppg_peaktime,data_ppg(ppg_peakidx),'o')
-        title('PPG');xline(timestamp,'Color','r')
-        subplot(412)
+        title('PPG [n.u.]');xline(timestamp,'Color','g','LineWidth',2)
+        xlim([54.35 54.7])
+        subplot(312)
         plot(session_ECG_time,data_ecg)
         hold on 
         plot(ecg_peaktime,data_ecg(ecg_peakidx),'o');
-        xline(timestamp,'Color','r');ylabel('ECG');xlabel('Time [min]')
-        subplot(425)
-        plot(time_PAT,PAT,'o-');ylabel('PAT [ms]')
-        xline(timestamp,'Color','r');xlabel('Time [min]')
-        subplot(426)
-        plot(time_PAT(1:end-1),diff(PAT),'*-');
-        ylabel('PATv [ms]');xlabel('Time [min]');
-        xline(timestamp,'Color','r','DisplayName','Supine-stand')
-        subplot(414)
-        plot(calibrated_peaks_ppg(1:end-1),60./diff(60*calibrated_peaks_ppg),'o-');hold on;
-        plot(calibrated_peaks_ecg(1:end-1),60./diff(60*calibrated_peaks_ecg),'*-');
+        xline(timestamp,'Color','g','LineWidth',2);ylabel('ECG [mV]');
+        xlim([54.35 54.7])      
+        subplot(313)
+        plot(calibrated_peaks_ppg(1:end-1),diff(calibrated_peaks_ppg),'o-');hold on;
+        plot(calibrated_peaks_ecg(1:end-1),diff(calibrated_peaks_ecg),'*-');
         legend('PR','HR');ylabel('Heart rate [bpm]')
-        xline(timestamp,'Color','r','DisplayName','Supine-stand')
+        xline(timestamp,'Color','g','LineWidth',2)
+        xlim([54.35 54.7])
         sgtitle(id)
+
+      
+       
+        xline([timestamp(1)*60 timestamp(2)*60],'g','LineWidth',2);
+        legend('HR','PR'); ylabel('[bpm]');xlabel('Time [s]')
     end
 
-    %% supine
-      
-    
+    %% supine   
     time_RR_win = time_RR(time_RR < timestamp(1)-.5 & time_RR > session_ECG_time(1)+.5);
     time_PR_win = time_PR(time_PR < timestamp(1)-.5 & time_PR > session_PPG_time(1)+.5);
  
@@ -124,7 +100,6 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
         HRV_supine_young = calculate_HRVfeatures(RR_win*60,time_RR_win*60,Fs_resample,HRV_supine_young);
         PRV_supine_young = calculate_HRVfeatures(PR_win*60,time_PR_win*60,Fs_resample,PRV_supine_young);       
     end
-
     %% upright
     
     RR_win = RR(time_RR < session_PPG_time(end)-.5 & time_RR > timestamp(2)+.5);
@@ -138,8 +113,7 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
     else
         HRV_upright_young = calculate_HRVfeatures(RR_win*60,time_RR_win*60,Fs_resample,HRV_upright_young);
         PRV_upright_young = calculate_HRVfeatures(PR_win*60,time_PR_win*60,Fs_resample,PRV_upright_young);
-    end
-    
+    end    
     %% transition
     
     RR_win = RR(time_RR < timestamp(2)+1 & time_RR > timestamp(1)-1);
@@ -159,14 +133,14 @@ end
 %% statistical analysis HRV-PRV
 
 % Young 
-results_transitions_young = consistent_analysis(HRV_transition_young,PRV_transition_young);sgtitle('Transition Young');
-results_supine_young = consistent_analysis(HRV_supine_young,PRV_supine_young);sgtitle('Supine Young');
-results_upright_young = consistent_analysis(HRV_upright_young,PRV_upright_young);sgtitle('Upright Young');
+results_transitions_young = consistent_analysis(HRV_transition_young,PRV_transition_young);
+results_supine_young = consistent_analysis(HRV_supine_young,PRV_supine_young);close all;
+results_upright_young = consistent_analysis(HRV_upright_young,PRV_upright_young);
 % 
 % % Old
-results_transitions_old = consistent_analysis(HRV_transition_old,PRV_transition_old);sgtitle('Old Transition');
-results_supine_old = consistent_analysis(HRV_supine_old,PRV_supine_old);sgtitle('Supine Old');
-results_upright_old = consistent_analysis(HRV_upright_old,PRV_upright_old);sgtitle('Upright Old');
+results_transitions_old = consistent_analysis(HRV_transition_old,PRV_transition_old);
+results_supine_old = consistent_analysis(HRV_supine_old,PRV_supine_old);
+results_upright_old = consistent_analysis(HRV_upright_old,PRV_upright_old);
 
 
 %% plots 
@@ -177,6 +151,5 @@ data_PRV.PRV_transition_old = PRV_transition_old; data_PRV.PRV_transition_young 
 data_PRV.PRV_supine_old = PRV_supine_old; data_PRV.PRV_supine_young = PRV_supine_young;
 data_PRV.PRV_upright_old = PRV_upright_old;  data_PRV.PRV_upright_young = PRV_upright_young;
 
-plot_figures_hrvprv(data_HRV,data_PRV,'young') % HRV-PRV
+plot_figures_hrvprv1(data_HRV,data_PRV,'young') % HRV-PRV
 
-end

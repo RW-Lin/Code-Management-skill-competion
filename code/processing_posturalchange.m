@@ -83,6 +83,7 @@ savepath = 'C:\Users\LinR\OneDrive - University of Twente\work\project\Spectral 
         data_ecg_session = ecg_data(session_index_ecg); session_ECG_time = ECG_time(session_index_ecg);
 
         session_index_sbp = find(SBP_time>=timestamp(1)-lag_before & SBP_time<=timestamp(2)+lag_after);
+        %% 
         data_sbp_session = data_SBP(session_index_sbp); session_SBP_time = SBP_time(session_index_sbp);
         
         % detect peaks
