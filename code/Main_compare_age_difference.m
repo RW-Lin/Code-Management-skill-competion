@@ -36,7 +36,7 @@ PRV_transition_young = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[]
     'pHF',[],'LFHFratio',[],'SD1',[],'SD2',[],'SDratio',[],'ApEn',[],'SampEn',[]); 
 
 %%
-for sg_num = 4:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 27 36 60
+for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 27 36 60
     
     filename = dirInfo(sg_num).name;
     id = sscanf(filename, '%*[^0-9]%d'); id = id(1);
@@ -54,7 +54,6 @@ for sg_num = 4:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
     [~, calibrated_peaks_ecg, calibrated_peaks_ppg] =...
         calculate_PATv(ecg_peaktime*60,ppg_peaktime*60,psqi_session,fs_ppg,timestamp*60,lag_before);
     
-    % [PAT,time_PAT] = PATfilter(PAT, calibrated_peaks_ppg, 30);
     RR = HRV.RRfilter(diff(calibrated_peaks_ecg),60); 
     PR = HRV.RRfilter(diff(calibrated_peaks_ppg),60);
     time_RR = calibrated_peaks_ecg(1:end-1); time_PR = calibrated_peaks_ppg(1:end-1);
@@ -62,7 +61,7 @@ for sg_num = 4:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
     PR_win = PR(time_PR < timestamp(1)-0.5 & time_PR > session_PPG_time(1)+0.5);
 
     % ******** visual check if the peak detection is correct *********
-    if debug && id>200
+    if id>200 && sg_num == 4
         figure,subplot(311)
         plot(session_PPG_time,data_ppg)
         hold on 
