@@ -1,4 +1,4 @@
-function plot_figures_hrvprv1(data_HRV, data_PRV, group)
+function plot_figures_hrvprv(data_HRV, data_PRV, group)
 %% 数据加载
 if strcmp(group, 'young')
     HRV_transition = data_HRV.HRV_transition_young; HRV_supine = data_HRV.HRV_supine_young;

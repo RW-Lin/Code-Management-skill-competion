@@ -6,8 +6,8 @@ overlap = 1; win_len = 2; %minute
 lag_before = 5; lag_after = 3; % duration before and after timestamp
 fs_ppg = 1e3; debug = 0; fs_ecg = 3e2;
 
-
-savepath = 'C:\Users\LinR\OneDrive - University of Twente\work\project\Spectral analysis of HRV, PTT and BP\Codes\store_results\Supine_stand\'; 
+% please change savepath
+savepath = 'C:\Users\LinR\OneDrive - University of Twente\work\project\Spectral analysis of HRV, PTT and BP\Writing\EMBC 2025\arxiv_codes\data\'; 
 dirInfo = dir(savepath);
 %% initialization
 HRV_supine_old = struct('AHR',[],'RMSSD',[],'SDNN',[],'SDSD',[],'pNN50',[],'LF',[],'HF',[],'pLF',[],...
@@ -61,7 +61,7 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
     PR_win = PR(time_PR < timestamp(1)-0.5 & time_PR > session_PPG_time(1)+0.5);
 
     % ******** visual check if the peak detection is correct *********
-    if id>200 && sg_num == 4
+    if sg_num == 4
         figure,subplot(311)
         plot(session_PPG_time,data_ppg)
         hold on 
@@ -79,13 +79,7 @@ for sg_num = 3:length(dirInfo) %[3:13 16:27 29:31 33:length(dirInfo)] % [15 16 2
         plot(calibrated_peaks_ecg(1:end-1),diff(calibrated_peaks_ecg),'*-');
         legend('PR','HR');ylabel('Heart rate [bpm]')
         xline(timestamp,'Color','g','LineWidth',2)
-        xlim([54.35 54.7])
-        sgtitle(id)
-
-      
-       
-        xline([timestamp(1)*60 timestamp(2)*60],'g','LineWidth',2);
-        legend('HR','PR'); ylabel('[bpm]');xlabel('Time [s]')
+        xlim([54.35 54.7])      
     end
 
     %% supine   
@@ -133,13 +127,13 @@ end
 
 % Young 
 results_transitions_young = consistent_analysis(HRV_transition_young,PRV_transition_young);
-results_supine_young = consistent_analysis(HRV_supine_young,PRV_supine_young);close all;
+results_supine_young = consistent_analysis(HRV_supine_young,PRV_supine_young);
 results_upright_young = consistent_analysis(HRV_upright_young,PRV_upright_young);
 % 
 % % Old
-results_transitions_old = consistent_analysis(HRV_transition_old,PRV_transition_old);
-results_supine_old = consistent_analysis(HRV_supine_old,PRV_supine_old);
-results_upright_old = consistent_analysis(HRV_upright_old,PRV_upright_old);
+% results_transitions_old = consistent_analysis(HRV_transition_old,PRV_transition_old);
+% results_supine_old = consistent_analysis(HRV_supine_old,PRV_supine_old);
+% results_upright_old = consistent_analysis(HRV_upright_old,PRV_upright_old);
 
 
 %% plots 
@@ -150,5 +144,5 @@ data_PRV.PRV_transition_old = PRV_transition_old; data_PRV.PRV_transition_young 
 data_PRV.PRV_supine_old = PRV_supine_old; data_PRV.PRV_supine_young = PRV_supine_young;
 data_PRV.PRV_upright_old = PRV_upright_old;  data_PRV.PRV_upright_young = PRV_upright_young;
 
-plot_figures_hrvprv1(data_HRV,data_PRV,'young') % HRV-PRV
+plot_figures_hrvprv(data_HRV,data_PRV,'young') % HRV-PRV
 
